@@ -12,20 +12,13 @@ import LoggedInUserDetails from "./components/LoggedInUserDetails";
 function App() {
   const [blogs, setBlogs] = useState([]);
   const [title, setNewBlogTitle] = useState('');
+  const [author, setNewBlogAuthor] = useState('');
   const [url, setNewBlogUrl] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [notificationType, setNotificationType] = useState('');
-
-  const setNotification = (message = '', type = '') => {
-    setNotificationMessage(message);
-    setNotificationType(type);
-    setTimeout(() => {
-      setNotification();
-    }, 3000);
-  };
 
   useEffect(() => {
     const savedUser = loginService.getUserData() || null;
@@ -39,12 +32,23 @@ function App() {
     })
   }, []);
 
-  const usernameInputHandler = (event) => {
-    setUsername(event.target.value);
+  const setNotification = (message = '', type = '') => {
+    setNotificationMessage(message);
+    setNotificationType(type);
+    setTimeout(() => {
+      setNotification();
+    }, 3000);
   };
 
-  const passwordInputHandler = (event) => {
-    setPassword(event.target.value);
+  const clearCreateBlogTable = () => {
+    setNewBlogUrl('');
+    setNewBlogAuthor('');
+    setNewBlogTitle('');
+  };
+
+  const clearLoginTable = () => {
+    setUsername('');
+    setPassword('');
   };
 
   const logoutHandler = () => {
@@ -58,13 +62,11 @@ function App() {
       const userData = await loginService.userLogin({username, password});
       setUser(userData);
       loginService.saveUserData(userData);
-      setUsername('');
-      setPassword('');
+      clearLoginTable();
       setNotification('Successfully logged in', 'success');
     } catch (e) {
-      setNotification(e.response.data.message, 'error');
-      setUsername('');
-      setPassword('');
+      setNotification(e.response.data.error, 'error');
+      clearLoginTable();
     }
   };
 
@@ -72,18 +74,17 @@ function App() {
     event.preventDefault();
     const newBlogItem = {
       title,
+      author,
       url
     };
     try {
       const newBlog = await blogService.createBlog(newBlogItem);
       setNotification('Blog entry successfully created', 'success');
       setBlogs([...blogs, newBlog]);
-      setNewBlogTitle('');
-      setNewBlogUrl('');
+      clearCreateBlogTable();
     } catch (e) {
-      setNotification(e.message, 'error');
-      setNewBlogTitle('');
-      setNewBlogUrl('');
+      setNotification(e.response.data.error, 'error');
+      clearCreateBlogTable();
     }
   };
 
@@ -95,15 +96,17 @@ function App() {
             <LoginForm
               username={username}
               password={password}
-              onUsernameChange={usernameInputHandler}
-              onPasswordChange={passwordInputHandler}
+              onUsernameChange={(e) => {setUsername(e.target.value)}}
+              onPasswordChange={(e) => {setPassword(e.target.value)}}
               loginHandler={loginHandler}
           /> :
           <CreateBlogForm
             title={title}
             url={url}
+            author={author}
             onTitleChange={(e) => { setNewBlogTitle(e.target.value) }}
             onUrlChange={(e) => { setNewBlogUrl(e.target.value) }}
+            onAuthorChange={(e) => { setNewBlogAuthor(e.target.value) }}
             onSubmit={createBlogHandler}
           />
       }

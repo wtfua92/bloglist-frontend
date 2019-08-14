@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CreateBlogForm({ title, url, onTitleChange, onUrlChange, onSubmit }) {
+function CreateBlogForm({ title, url, author, onTitleChange, onUrlChange, onAuthorChange, onSubmit }) {
     return (
         <div>
             <h1>New Entry</h1>
@@ -11,7 +11,12 @@ function CreateBlogForm({ title, url, onTitleChange, onUrlChange, onSubmit }) {
                 </div>
                 <br/>
                 <div>
-                    <label htmlFor="url">Url </label>
+                    <label htmlFor="author">Author </label>
+                    <input id="author" name="author" value={author} type="text" onChange={onAuthorChange}/>
+                </div>
+                <br/>
+                <div>
+                    <label htmlFor="url">URL </label>
                     <input id="url" name="url" value={url} type="text" onChange={onUrlChange}/>
                 </div>
                 <br/>
