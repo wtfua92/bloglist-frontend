@@ -8,6 +8,9 @@ import CreateBlogForm from "./components/CreateBlogForm";
 import BlogList from "./components/BlogList";
 import Notification from "./components/Notification/Notification";
 import LoggedInUserDetails from "./components/LoggedInUserDetails";
+import Togglable from "./components/Togglable";
+
+const createBlogFormRef = React.createRef();
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -27,6 +30,7 @@ function App() {
     }
     blogService.getAll().then(response => {
       setBlogs((blogs) => {
+        console.log(response);
         return [...blogs, ...response];
       });
     })
@@ -82,8 +86,9 @@ function App() {
       setNotification('Blog entry successfully created', 'success');
       setBlogs([...blogs, newBlog]);
       clearCreateBlogTable();
+      createBlogFormRef.current.toggleVisibility();
     } catch (e) {
-      setNotification(e.response.data.error, 'error');
+      setNotification(e.message, 'error');
       clearCreateBlogTable();
     }
   };
@@ -92,6 +97,7 @@ function App() {
     <div className="App">
       <Notification message={notificationMessage} type={notificationType} />
       <LoggedInUserDetails user={user} onLogout={logoutHandler} />
+      <br/>
       {!user ?
             <LoginForm
               username={username}
@@ -100,15 +106,18 @@ function App() {
               onPasswordChange={(e) => {setPassword(e.target.value)}}
               loginHandler={loginHandler}
           /> :
-          <CreateBlogForm
-            title={title}
-            url={url}
-            author={author}
-            onTitleChange={(e) => { setNewBlogTitle(e.target.value) }}
-            onUrlChange={(e) => { setNewBlogUrl(e.target.value) }}
-            onAuthorChange={(e) => { setNewBlogAuthor(e.target.value) }}
-            onSubmit={createBlogHandler}
-          />
+          <Togglable buttonText="Create Blog Entry" ref={createBlogFormRef}>
+            <CreateBlogForm
+                title={title}
+                url={url}
+                author={author}
+                onTitleChange={(e) => { setNewBlogTitle(e.target.value) }}
+                onUrlChange={(e) => { setNewBlogUrl(e.target.value) }}
+                onAuthorChange={(e) => { setNewBlogAuthor(e.target.value) }}
+                onSubmit={createBlogHandler}
+            />
+          </Togglable>
+
       }
       {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList blogs={blogs} />}
     </div>
