@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import authService from '../services/authentication';
 
 const Blog = ({ blog, likeHandler, index, deleteHandler }) => {
     const [detailsVisible, setDetailsVisible] = useState(false);
+    const [showDeleteButton, setShowDeleteButton] = useState(false);
+
+    useEffect(() => {
+        const userData = authService.getUserData();
+        if (userData) {
+            setShowDeleteButton(blog.user.id.toString() === userData.id.toString());
+        }
+    }, [blog.user]);
+
     const style = {
         width: '300px',
         maxHeight: detailsVisible ? '' : '80px',
@@ -20,7 +30,7 @@ const Blog = ({ blog, likeHandler, index, deleteHandler }) => {
             <span>Likes: {blog.likes} </span>
             <button type="button" onClick={() => { likeHandler(blog, index) }}>Like</button>
             <p>Added by {blog.user.username}</p>
-            <button type="button" onClick={() => { deleteHandler(blog.id, index) }}>Remove</button>
+            {showDeleteButton && <button type="button" onClick={() => { deleteHandler(blog.id, index) }}>Remove</button>}
         </div>}
     </div>);
 };

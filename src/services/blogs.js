@@ -3,17 +3,17 @@ import authService from './authentication';
 
 const baseUrl = '/api/blogs';
 
+const getConfig = () => ({
+  headers: {Authorization: `Bearer ${authService.getToken()}` || ''}
+});
+
 const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then(response => response.data);
 };
 
 const createBlog = async (blogData) => {
-  const config = {
-    headers: {Authorization: `Bearer ${authService.getToken()}` || ''}
-  };
-
-  return (await axios.post(baseUrl, blogData, config)).data;
+  return (await axios.post(baseUrl, blogData, getConfig())).data;
 };
 
 const updateBlog = async (updatedBlog) => {
@@ -21,7 +21,7 @@ const updateBlog = async (updatedBlog) => {
 };
 
 const deleteBlog = async (id) => {
-  return axios.delete(`${baseUrl}/${id}`);
+  return axios.delete(`${baseUrl}/${id}`, getConfig());
 };
 
 export default { getAll, createBlog, updateBlog, deleteBlog }

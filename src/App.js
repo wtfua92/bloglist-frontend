@@ -114,7 +114,7 @@ function App() {
       setBlogs([...blogs.slice(0, index), ...blogs.slice(index + 1)]);
       setNotification('Item was removed', 'success');
     } catch (e) {
-      setNotification(e.message, 'error');
+      setNotification(e.response.data.error, 'error');
     }
   };
 
