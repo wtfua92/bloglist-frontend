@@ -93,18 +93,13 @@ function App() {
     }
   };
 
-  const likeHandler = async (blog) => {
-    const likedBlog = {
-      ...blog,
-      likes: blog.likes + 1
-    };
-    const updatedBlog = await blogService.updateBlog(likedBlog);
-    const updatedBlogList = blogs.map((b) => {
-      if (b.id === updatedBlog.id) {
-        b.likes += 1;
-      }
-      return b;
+  const likeHandler = async ({id, likes}, index) => {
+    await blogService.updateBlog({
+      id,
+      likes: likes + 1
     });
+    const updatedBlogList = [...blogs];
+    updatedBlogList[index].likes += 1;
     setBlogs(updatedBlogList);
   };
 

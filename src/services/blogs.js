@@ -17,7 +17,7 @@ const createBlog = async (blogData) => {
 };
 
 const updateBlog = async (updatedBlog) => {
-  return (axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog)).data;
+  return (await axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog)).data;
 };
 
 export default { getAll, createBlog, updateBlog }

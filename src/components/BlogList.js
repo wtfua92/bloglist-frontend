@@ -12,7 +12,7 @@ function BlogList({blogs, likeHandler}) {
             <h2>List of blogs:</h2>
             <div style={style}>
                 {
-                    blogs && blogs.map(b => (<Blog likeHandler={likeHandler} blog={b} key={b.id} />))
+                    blogs && blogs.map((b, i) => (<Blog likeHandler={likeHandler} blog={b} index={i} key={b.id} />))
                 }
             </div>
         </div>
