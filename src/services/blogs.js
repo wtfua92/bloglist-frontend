@@ -16,4 +16,8 @@ const createBlog = async (blogData) => {
   return (await axios.post(baseUrl, blogData, config)).data;
 };
 
-export default { getAll, createBlog }
+const updateBlog = async (updatedBlog) => {
+  return (axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog)).data;
+};
+
+export default { getAll, createBlog, updateBlog }

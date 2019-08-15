@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeHandler }) => {
     const [detailsVisible, setDetailsVisible] = useState(false);
     const style = {
         width: '300px',
@@ -18,7 +18,7 @@ const Blog = ({ blog }) => {
         <p> by {blog.author}</p>
         {detailsVisible && <div>
             <span>Likes: {blog.likes} </span>
-            <button type="button">Like</button>
+            <button type="button" onClick={() => { likeHandler(blog) }}>Like</button>
             <p>Added by {blog.user.username}</p>
         </div>}
     </div>);

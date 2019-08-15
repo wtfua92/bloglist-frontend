@@ -1,7 +1,7 @@
 import React from 'react';
 import Blog from "./Blog";
 
-function BlogList({blogs}) {
+function BlogList({blogs, likeHandler}) {
     const style = {
         display: 'flex',
         flexWrap: 'wrap'
@@ -12,7 +12,7 @@ function BlogList({blogs}) {
             <h2>List of blogs:</h2>
             <div style={style}>
                 {
-                    blogs && blogs.map(b => (<Blog blog={b} key={b.id} />))
+                    blogs && blogs.map(b => (<Blog likeHandler={likeHandler} blog={b} key={b.id} />))
                 }
             </div>
         </div>

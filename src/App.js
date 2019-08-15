@@ -93,6 +93,21 @@ function App() {
     }
   };
 
+  const likeHandler = async (blog) => {
+    const likedBlog = {
+      ...blog,
+      likes: blog.likes + 1
+    };
+    const updatedBlog = await blogService.updateBlog(likedBlog);
+    const updatedBlogList = blogs.map((b) => {
+      if (b.id === updatedBlog.id) {
+        b.likes += 1;
+      }
+      return b;
+    });
+    setBlogs(updatedBlogList);
+  };
+
   return (
     <div className="App">
       <Notification message={notificationMessage} type={notificationType} />
@@ -119,7 +134,7 @@ function App() {
           </Togglable>
 
       }
-      {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList blogs={blogs} />}
+      {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList likeHandler={likeHandler} blogs={blogs} />}
     </div>
   );
 }
