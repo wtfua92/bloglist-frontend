@@ -22,6 +22,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [notificationType, setNotificationType] = useState('');
+  const [order, setOrder] = useState('desc');
 
   useEffect(() => {
     const savedUser = loginService.getUserData() || null;
@@ -103,6 +104,18 @@ function App() {
     setBlogs(updatedBlogList);
   };
 
+  const sortByLikes = () => {
+    let sortedBlogs;
+    if (order === 'asc') {
+      setOrder('desc');
+      sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+    } else {
+      setOrder('asc');
+      sortedBlogs = blogs.sort((a, b) => a.likes - b.likes);
+    }
+    setBlogs(sortedBlogs);
+  };
+
   return (
     <div className="App">
       <Notification message={notificationMessage} type={notificationType} />
@@ -129,7 +142,7 @@ function App() {
           </Togglable>
 
       }
-      {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList likeHandler={likeHandler} blogs={blogs} />}
+      {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList blogOrder={order} sortByLikesHandler={sortByLikes} likeHandler={likeHandler} blogs={blogs} />}
     </div>
   );
 }
