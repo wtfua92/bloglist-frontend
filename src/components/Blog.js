@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Blog = ({ blog, likeHandler, index }) => {
+const Blog = ({ blog, likeHandler, index, deleteHandler }) => {
     const [detailsVisible, setDetailsVisible] = useState(false);
     const style = {
         width: '300px',
@@ -20,6 +20,7 @@ const Blog = ({ blog, likeHandler, index }) => {
             <span>Likes: {blog.likes} </span>
             <button type="button" onClick={() => { likeHandler(blog, index) }}>Like</button>
             <p>Added by {blog.user.username}</p>
+            <button type="button" onClick={() => { deleteHandler(blog.id, index) }}>Remove</button>
         </div>}
     </div>);
 };

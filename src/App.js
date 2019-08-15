@@ -95,13 +95,27 @@ function App() {
   };
 
   const likeHandler = async ({id, likes}, index) => {
-    await blogService.updateBlog({
-      id,
-      likes: likes + 1
-    });
-    const updatedBlogList = [...blogs];
-    updatedBlogList[index].likes += 1;
-    setBlogs(updatedBlogList);
+    try {
+      await blogService.updateBlog({
+        id,
+        likes: likes + 1
+      });
+      const updatedBlogList = [...blogs];
+      updatedBlogList[index].likes += 1;
+      setBlogs(updatedBlogList);
+    } catch (e) {
+      setNotification(e.message, 'error');
+    }
+  };
+
+  const deleteBlog = async (id, index) => {
+    try {
+      await blogService.deleteBlog(id);
+      setBlogs([...blogs.slice(0, index), ...blogs.slice(index + 1)]);
+      setNotification('Item was removed', 'success');
+    } catch (e) {
+      setNotification(e.message, 'error');
+    }
   };
 
   const sortByLikes = () => {
@@ -142,7 +156,7 @@ function App() {
           </Togglable>
 
       }
-      {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList blogOrder={order} sortByLikesHandler={sortByLikes} likeHandler={likeHandler} blogs={blogs} />}
+      {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList blogOrder={order} sortByLikesHandler={sortByLikes} likeHandler={likeHandler} blogs={blogs} deleteItemHandler={deleteBlog} />}
     </div>
   );
 }

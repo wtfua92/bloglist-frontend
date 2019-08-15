@@ -20,4 +20,8 @@ const updateBlog = async (updatedBlog) => {
   return (await axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog)).data;
 };
 
-export default { getAll, createBlog, updateBlog }
+const deleteBlog = async (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+
+export default { getAll, createBlog, updateBlog, deleteBlog }
