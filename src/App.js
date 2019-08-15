@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import blogService from "./services/blogs";
-import loginService from "./services/authentication";
+import blogService from './services/blogs';
+import loginService from './services/authentication';
 
-import LoginForm from "./components/LoginForm";
-import CreateBlogForm from "./components/CreateBlogForm";
-import BlogList from "./components/BlogList";
-import Notification from "./components/Notification/Notification";
-import LoggedInUserDetails from "./components/LoggedInUserDetails";
-import Togglable from "./components/Togglable";
+import LoginForm from './components/LoginForm';
+import CreateBlogForm from './components/CreateBlogForm';
+import BlogList from './components/BlogList';
+import Notification from './components/Notification/Notification';
+import LoggedInUserDetails from './components/LoggedInUserDetails';
+import Togglable from './components/Togglable';
 
 const createBlogFormRef = React.createRef();
 
@@ -34,7 +34,7 @@ function App() {
         console.log(response);
         return [...blogs, ...response];
       });
-    })
+    });
   }, []);
 
   const setNotification = (message = '', type = '') => {
@@ -64,7 +64,7 @@ function App() {
   const loginHandler = async (event) => {
     event.preventDefault();
     try {
-      const userData = await loginService.userLogin({username, password});
+      const userData = await loginService.userLogin({ username, password });
       setUser(userData);
       loginService.saveUserData(userData);
       clearLoginTable();
@@ -94,7 +94,7 @@ function App() {
     }
   };
 
-  const likeHandler = async ({id, likes}, index) => {
+  const likeHandler = async ({ id, likes }, index) => {
     try {
       await blogService.updateBlog({
         id,
@@ -136,24 +136,24 @@ function App() {
       <LoggedInUserDetails user={user} onLogout={logoutHandler} />
       <br/>
       {!user ?
-            <LoginForm
-              username={username}
-              password={password}
-              onUsernameChange={(e) => {setUsername(e.target.value)}}
-              onPasswordChange={(e) => {setPassword(e.target.value)}}
-              loginHandler={loginHandler}
-          /> :
-          <Togglable buttonText="Create Blog Entry" ref={createBlogFormRef}>
-            <CreateBlogForm
-                title={title}
-                url={url}
-                author={author}
-                onTitleChange={(e) => { setNewBlogTitle(e.target.value) }}
-                onUrlChange={(e) => { setNewBlogUrl(e.target.value) }}
-                onAuthorChange={(e) => { setNewBlogAuthor(e.target.value) }}
-                onSubmit={createBlogHandler}
-            />
-          </Togglable>
+        <LoginForm
+          username={username}
+          password={password}
+          onUsernameChange={(e) => {setUsername(e.target.value);}}
+          onPasswordChange={(e) => {setPassword(e.target.value);}}
+          loginHandler={loginHandler}
+        /> :
+        <Togglable buttonText="Create Blog Entry" ref={createBlogFormRef}>
+          <CreateBlogForm
+            title={title}
+            url={url}
+            author={author}
+            onTitleChange={(e) => { setNewBlogTitle(e.target.value); }}
+            onUrlChange={(e) => { setNewBlogUrl(e.target.value); }}
+            onAuthorChange={(e) => { setNewBlogAuthor(e.target.value); }}
+            onSubmit={createBlogHandler}
+          />
+        </Togglable>
 
       }
       {!user || !blogs.length > 0 ? <p>No blogs in the list</p> : <BlogList blogOrder={order} sortByLikesHandler={sortByLikes} likeHandler={likeHandler} blogs={blogs} deleteItemHandler={deleteBlog} />}

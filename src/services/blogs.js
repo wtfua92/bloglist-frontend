@@ -1,10 +1,10 @@
-import axios from 'axios'
+import axios from 'axios';
 import authService from './authentication';
 
 const baseUrl = '/api/blogs';
 
 const getConfig = () => ({
-  headers: {Authorization: `Bearer ${authService.getToken()}` || ''}
+  headers: { Authorization: `Bearer ${authService.getToken()}` || '' }
 });
 
 const getAll = () => {
@@ -24,4 +24,4 @@ const deleteBlog = async (id) => {
   return axios.delete(`${baseUrl}/${id}`, getConfig());
 };
 
-export default { getAll, createBlog, updateBlog, deleteBlog }
+export default { getAll, createBlog, updateBlog, deleteBlog };
