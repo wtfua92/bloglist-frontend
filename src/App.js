@@ -31,7 +31,6 @@ function App() {
         }
         blogService.getAll().then(response => {
             setBlogs((blogs) => {
-                console.log(response);
                 return [...blogs, ...response];
             });
         });

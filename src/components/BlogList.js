@@ -8,7 +8,7 @@ function BlogList({ blogs, likeHandler, sortByLikesHandler, blogOrder, deleteIte
     };
 
     return (
-        <div>
+        <div className="blog-list">
             <h2>
                 List of blogs:
             </h2>

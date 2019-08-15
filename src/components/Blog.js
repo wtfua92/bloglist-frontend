@@ -9,7 +9,7 @@ const Blog = ({ blog, likeHandler, index, deleteHandler }) => {
     useEffect(() => {
         const userData = authService.getUserData();
         if (userData) {
-            setShowDeleteButton(blog.user.id.toString() === userData.id.toString());
+            setShowDeleteButton(blog.user.id === userData.id);
         }
     }, [blog.user]);
 

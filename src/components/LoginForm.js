@@ -2,7 +2,7 @@ import React from 'react';
 
 function LoginForm({ username, password, onUsernameChange, onPasswordChange, loginHandler }) {
     return (
-        <div>
+        <div className="login-form">
             <h1>Log in form</h1>
             <form onSubmit={loginHandler}>
                 <div>
