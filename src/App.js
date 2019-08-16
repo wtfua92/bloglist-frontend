@@ -17,8 +17,6 @@ function App() {
     const [title, setNewBlogTitle] = useState('');
     const [author, setNewBlogAuthor] = useState('');
     const [url, setNewBlogUrl] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [user, setUser] = useState(null);
     const [notificationMessage, setNotificationMessage] = useState('');
     const [notificationType, setNotificationType] = useState('');
@@ -50,27 +48,20 @@ function App() {
         setNewBlogTitle('');
     };
 
-    const clearLoginTable = () => {
-        setUsername('');
-        setPassword('');
-    };
-
     const logoutHandler = () => {
         setUser(null);
         loginService.removeUserData();
     };
 
-    const loginHandler = async (event) => {
+    const loginHandler = async (username, password, event) => {
         event.preventDefault();
         try {
             const userData = await loginService.userLogin({ username, password });
             setUser(userData);
             loginService.saveUserData(userData);
-            clearLoginTable();
             setNotification('Successfully logged in', 'success');
         } catch (e) {
             setNotification(e.response.data.error, 'error');
-            clearLoginTable();
         }
     };
 
@@ -136,10 +127,6 @@ function App() {
             <br/>
             {!user ?
                 <LoginForm
-                    username={username}
-                    password={password}
-                    onUsernameChange={(e) => {setUsername(e.target.value);}}
-                    onPasswordChange={(e) => {setPassword(e.target.value);}}
                     loginHandler={loginHandler}
                 /> :
                 <Togglable buttonText="Create Blog Entry" ref={createBlogFormRef}>
