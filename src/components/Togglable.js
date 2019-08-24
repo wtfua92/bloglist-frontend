@@ -1,21 +1,14 @@
-import React, { useState, useImperativeHandle } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import { toggleVisibility } from '../reducers/togglable.reducer';
 
-const Togglable = React.forwardRef(({ children, buttonText }, ref) => {
-    const [visible, setVisible] = useState(false);
+const Togglable = ({ children, buttonText, visible, toggleVisibility }) => {
     const showWhenVisible = {
         display: visible ? '' : 'none'
     };
     const hideWhenVisible = {
         display: visible ? 'none' : ''
     };
-
-    const toggleVisibility = () => {
-        setVisible(!visible);
-    };
-
-    useImperativeHandle(ref, () => ({
-        toggleVisibility
-    }));
 
     return (
         <div>
@@ -28,6 +21,14 @@ const Togglable = React.forwardRef(({ children, buttonText }, ref) => {
             </div>
         </div>
     );
+};
+
+const mapStateToProps = ({ createBlogFormVisibility }) => ({
+    visible: createBlogFormVisibility
 });
 
-export default Togglable;
+const mapDispatchToProps = {
+    toggleVisibility
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Togglable);

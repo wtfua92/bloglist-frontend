@@ -1,5 +1,6 @@
 import React from 'react';
 import './Notification.css';
+import { connect } from 'react-redux';
 
 function Notification({ message, type = '' }) {
     if (!message) {
@@ -13,4 +14,9 @@ function Notification({ message, type = '' }) {
     );
 }
 
-export default Notification;
+const mapStateToProps = ({ notification }) => ({
+    message: notification.message,
+    type: notification.type
+});
+
+export default connect(mapStateToProps)(Notification);

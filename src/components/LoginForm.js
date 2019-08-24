@@ -1,14 +1,22 @@
 import React from 'react';
-import {useField} from "../hooks";
+import { connect } from 'react-redux';
+import { userLogin, setUserFormField } from '../actions/user.action';
+import { setNotification, clearNotification } from '../actions/notification.action';
 
-function LoginForm({loginHandler}) {
-    const {reset: resetUsername, ...username} = useField('text');
-    const {reset: resetPassword, ...password} = useField('password');
-
-    const onSubmitHandler = (event) => {
-        loginHandler(username.value, password.value, event);
-        resetPassword();
-        resetUsername();
+function LoginForm({ user, userLogin, setUserFormField, setNotification, clearNotification }) {
+    const { username, password } = user;
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        if (username && password) {
+            userLogin({
+                username,
+                token: Math.floor(Math.random() * Math.floor(100000)),
+                id: Math.floor(Math.random() * Math.floor(100000))
+            });
+            setNotification(`${username} successfully logged in`, setTimeout(() => {
+                clearNotification();
+            }, 1000), 'success');
+        }
     };
 
     return (
@@ -17,12 +25,12 @@ function LoginForm({loginHandler}) {
             <form onSubmit={onSubmitHandler}>
                 <div>
                     <label htmlFor="username">Username: </label>
-                    <input id="username" name="username" {...username} />
+                    <input id="username" name="username" value={username} onChange={(e) => { setUserFormField({ username: e.target.value }); }} />
                 </div>
                 <br/>
                 <div>
                     <label htmlFor="password">Password: </label>
-                    <input id="password" name="password" {...password} />
+                    <input id="password" name="password" value={password} onChange={(e) => { setUserFormField({ password: e.target.value }); }} />
                 </div>
                 <br/>
                 <button type="submit">Log in</button >
@@ -31,4 +39,11 @@ function LoginForm({loginHandler}) {
     );
 }
 
-export default LoginForm;
+const mapDispatchToProps = {
+    userLogin,
+    setUserFormField,
+    setNotification,
+    clearNotification
+};
+
+export default connect(null, mapDispatchToProps)(LoginForm);

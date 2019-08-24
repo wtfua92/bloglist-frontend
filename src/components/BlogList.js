@@ -1,7 +1,10 @@
 import React from 'react';
-import Blog from './Blog';
+import { connect } from 'react-redux';
 
-function BlogList({ blogs, likeHandler, sortByLikesHandler, blogOrder, deleteItemHandler }) {
+import Blog from './Blog';
+import { changeDetailsVisibility, likeBlog } from '../actions/blogs.action';
+
+function BlogList({ blogs, changeDetailsVisibility, likeBlog }) {
     const style = {
         display: 'flex',
         flexWrap: 'wrap'
@@ -12,14 +15,22 @@ function BlogList({ blogs, likeHandler, sortByLikesHandler, blogOrder, deleteIte
             <h2>
                 List of blogs:
             </h2>
-            <button type="button" onClick={sortByLikesHandler}>Sort By Likes ({blogOrder.toUpperCase()})</button>
             <div style={style}>
                 {
-                    blogs && blogs.map((b, i) => (<Blog deleteHandler={deleteItemHandler} likeHandler={likeHandler} blog={b} index={i} key={b.id} />))
+                    blogs && blogs.map((b, i) => (<Blog blog={b} onLike={likeBlog} onDetailsChange={changeDetailsVisibility} index={i} key={b.id} />))
                 }
             </div>
         </div>
     );
 }
 
-export default BlogList;
+const mapStateToProps = (state) => ({
+    blogs: state.blogs
+});
+
+const mapDispatchToProps = {
+    changeDetailsVisibility,
+    likeBlog
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BlogList);
