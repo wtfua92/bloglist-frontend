@@ -2,7 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 // import authService from '../services/authentication';
 
-const Blog = ({ blog, index, onDetailsChange, onLike }) => {
+const Blog = ({ blog, index, onDetailsChange, onLike, showDeleteButton, onDelete }) => {
     // const [detailsVisible, setDetailsVisible] = useState(false);
     // const [showDeleteButton, setShowDeleteButton] = useState(false);
     //
@@ -33,7 +33,7 @@ const Blog = ({ blog, index, onDetailsChange, onLike }) => {
                 <span className="blog-item__info__likes">Likes: {blog.likes} </span>
                 <button className="blog-item__info__like-button" type="button" onClick={() => { onLike(index); }}>Like</button>
                 <p className="blog-item__info__user">Added by {blog.user.username}</p>
-                <button className="blog-item__info__remove-button" type="button">Remove</button>
+                {showDeleteButton && <button className="blog-item__info__remove-button" onClick={() => { onDelete(blog.id); }} type="button">Remove</button>}
             </div>
         }
     </div>);

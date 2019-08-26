@@ -1,8 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom';
+
 import { createBlogSetField, createBlogClearAll } from '../actions/createBlogForm.action';
 import { addBlog } from '../actions/blogs.action';
 import { toggleVisibility } from '../reducers/togglable.reducer';
+import { userAddBlog } from '../actions/user.action';
+import idGenerator from '../helpers/idGenerator';
 
 function CreateBlogForm({
     form,
@@ -10,7 +14,9 @@ function CreateBlogForm({
     createBlogClearAll,
     addBlog,
     toggleVisibility,
-    user
+    userAddBlog,
+    user,
+    history
 }) {
     const { title, author, url } = form;
     const formFilledIn = form.title && form.author && form.url;
@@ -18,12 +24,19 @@ function CreateBlogForm({
     const submitHandler = (e) => {
         e.preventDefault();
         if (formFilledIn) {
+            const id = idGenerator();
             if (user && user.token) {
-                form.user = user;
+                form.user = {
+                    id: user.id,
+                    username: user.username
+                };
             }
+            form.id = id;
             addBlog(form);
+            userAddBlog(id);
             createBlogClearAll();
             toggleVisibility();
+            history.push('/');
         }
     };
 
@@ -52,16 +65,17 @@ function CreateBlogForm({
     );
 }
 
-const mapStateToProps = ({ createBlogForm, user }) => ({
+const mapStateToProps = ({ createBlogForm, users }) => ({
     form: createBlogForm,
-    user
+    user: users.currentUser
 });
 
 const mapDispatchToProps = {
     createBlogSetField,
     createBlogClearAll,
     addBlog,
-    toggleVisibility
+    toggleVisibility,
+    userAddBlog
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateBlogForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateBlogForm));

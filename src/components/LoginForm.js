@@ -3,19 +3,25 @@ import { connect } from 'react-redux';
 import { userLogin, setUserFormField } from '../actions/user.action';
 import { setNotification, clearNotification } from '../actions/notification.action';
 
-function LoginForm({ user, userLogin, setUserFormField, setNotification, clearNotification }) {
+import idGenerator from '../helpers/idGenerator';
+
+function LoginForm({ user, users, userLogin, setUserFormField, setNotification, clearNotification }) {
     const { username, password } = user;
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        if (username && password) {
+        if (username && password && users.find((u) => u.username === username)) {
             userLogin({
                 username,
-                token: Math.floor(Math.random() * Math.floor(100000)),
-                id: Math.floor(Math.random() * Math.floor(100000))
+                token: idGenerator(),
+                id: idGenerator()
             });
             setNotification(`${username} successfully logged in`, setTimeout(() => {
                 clearNotification();
             }, 1000), 'success');
+        } else {
+            setNotification(`There is no such user ${username}. Please, sign up first`, setTimeout(() => {
+                clearNotification();
+            }, 1000), 'error');
         }
     };
 
@@ -25,19 +31,24 @@ function LoginForm({ user, userLogin, setUserFormField, setNotification, clearNo
             <form onSubmit={onSubmitHandler}>
                 <div>
                     <label htmlFor="username">Username: </label>
-                    <input id="username" name="username" value={username} onChange={(e) => { setUserFormField({ username: e.target.value }); }} />
+                    <input id="username" name="username" type="text" value={username} onChange={(e) => { setUserFormField({ username: e.target.value }); }} />
                 </div>
                 <br/>
                 <div>
                     <label htmlFor="password">Password: </label>
-                    <input id="password" name="password" value={password} onChange={(e) => { setUserFormField({ password: e.target.value }); }} />
+                    <input id="password" type="password" name="password" value={password} onChange={(e) => { setUserFormField({ password: e.target.value }); }} />
                 </div>
                 <br/>
-                <button type="submit">Log in</button >
+                <button type="submit">Log in</button>
             </form>
         </div>
     );
 }
+
+const mapStateToProps = ({ users }) => ({
+    users: users.users,
+    user: users.currentUser
+});
 
 const mapDispatchToProps = {
     userLogin,
@@ -46,4 +57,4 @@ const mapDispatchToProps = {
     clearNotification
 };
 
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

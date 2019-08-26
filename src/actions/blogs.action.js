@@ -7,10 +7,10 @@ export const addBlog = (newBlog) => ({
     }
 });
 
-export const deleteBlog = (index) => ({
+export const deleteBlog = (blogId) => ({
     type: blogActions.DELETE_BLOG,
     data: {
-        index
+        blogId
     }
 });
 

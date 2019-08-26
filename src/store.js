@@ -8,7 +8,7 @@ import toggleVisibilityReducer from './reducers/togglable.reducer';
 const reducers = combineReducers({
     blogs: blogsReducer,
     notification: notificationReducer,
-    user: userReducer,
+    users: userReducer,
     createBlogForm: createBlogFormReducer,
     createBlogFormVisibility: toggleVisibilityReducer
 });

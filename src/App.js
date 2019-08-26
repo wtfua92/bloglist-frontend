@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // import blogService from './services/blogs';
 // import loginService from './services/authentication';
@@ -10,8 +11,9 @@ import BlogList from './components/BlogList';
 import Notification from './components/Notification/Notification';
 import LoggedInUserDetails from './components/LoggedInUserDetails';
 import Togglable from './components/Togglable';
-
-const createBlogFormRef = React.createRef();
+import Navbar from './components/Navbar';
+import Users from './components/Users';
+import IndividualUser from './components/IndividualUser';
 
 function App({ user }) {
     return (
@@ -19,19 +21,24 @@ function App({ user }) {
             <Notification />
             <LoggedInUserDetails user={user} />
             <br/>
-            {!user.token ?
-                <LoginForm user={user} /> :
-                <Togglable buttonText="Create Blog Entry" ref={createBlogFormRef}>
-                    <CreateBlogForm />
-                </Togglable>
-            }
-            <BlogList />
+            <Router>
+                <Navbar/>
+                {!user.token ?
+                    <LoginForm/> :
+                    <Togglable buttonText="Create Blog Entry">
+                        <CreateBlogForm/>
+                    </Togglable>
+                }
+                <Route exact path="/" component={BlogList} />
+                <Route path="/users" component={Users} />
+                <Route path="/users/:id" render={({ match }) => <IndividualUser userId={match.params.id} />} />
+            </Router>
         </div>
     );
 }
 
-const mapStateToProps = ({ user }) => ({
-    user
+const mapStateToProps = ({ users }) => ({
+    user: users.currentUser
 });
 
 export default connect(mapStateToProps)(App);

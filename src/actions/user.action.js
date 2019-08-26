@@ -11,6 +11,20 @@ export const userLogout = () => ({
     type: 'USER_LOGOUT'
 });
 
+export const userAddBlog = (blogId) => ({
+    type: 'USER_ADD_BLOG',
+    data: {
+        blogId
+    }
+});
+
+export const userRemoveBlog = (blogId) => ({
+    type: 'USER_REMOVE_BLOG',
+    data: {
+        blogId
+    }
+});
+
 export const setUserFormField = (newField) => ({
     type: 'SET_USER_FORM_FIELD',
     data: {
@@ -22,5 +36,7 @@ export const setUserFormField = (newField) => ({
 export default {
     userLogin,
     userLogout,
-    setUserFormField
+    setUserFormField,
+    userAddBlog,
+    userRemoveBlog
 };
