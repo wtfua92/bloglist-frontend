@@ -1,5 +1,5 @@
 import axios from 'axios';
-import authService from './authentication';
+import authService from './authentication.service';
 
 const baseUrl = '/api/blogs';
 
@@ -17,7 +17,7 @@ const createBlog = async (blogData) => {
 };
 
 const updateBlog = async (updatedBlog) => {
-    return (await axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog)).data;
+    return axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog);
 };
 
 const deleteBlog = async (id) => {

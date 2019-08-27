@@ -1,10 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-// import blogService from './services/blogs';
-// import loginService from './services/authentication';
-//
 import LoginForm from './components/LoginForm';
 import CreateBlogForm from './components/CreateBlogForm';
 import BlogList from './components/BlogList';
@@ -14,8 +11,16 @@ import Togglable from './components/Togglable';
 import Navbar from './components/Navbar';
 import Users from './components/Users';
 import IndividualUser from './components/IndividualUser';
+import BlogWithDetails from './components/BlogWithDetails';
+import { initBlogs } from './actions/blogs.action';
+import { initUsers } from './actions/user.action';
 
-function App({ user }) {
+function App({ user, initBlogs, initUsers }) {
+    useEffect(() => {
+        initBlogs();
+        initUsers();
+    }, [initBlogs, initUsers]);
+
     return (
         <div className="App">
             <Notification />
@@ -32,6 +37,7 @@ function App({ user }) {
                 <Route exact path="/" component={BlogList} />
                 <Route path="/users" component={Users} />
                 <Route path="/users/:id" render={({ match }) => <IndividualUser userId={match.params.id} />} />
+                <Route path="/blogs/:id" render={({ match }) => <BlogWithDetails blogId={match.params.id} />} />
             </Router>
         </div>
     );
@@ -41,4 +47,9 @@ const mapStateToProps = ({ users }) => ({
     user: users.currentUser
 });
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = {
+    initBlogs,
+    initUsers
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

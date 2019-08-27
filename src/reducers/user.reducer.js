@@ -1,42 +1,33 @@
+export const userActions = {
+    INIT_USERS: 'INIT_USERS',
+    USER_LOGIN: 'USER_LOGIN',
+    USER_LOGOUT: 'USER_LOGOUT',
+    SET_USER_FORM_FIELD: 'SET_USER_FORM_FIELD',
+    USER_ADD_BLOG: 'USER_ADD_BLOG',
+    USER_REMOVE_BLOG: 'USER_REMOVE_BLOG'
+};
+
 const initialState = {
-    users: [
-        {
-            username: 'user1',
-            name: 'User 1',
-            id: 'user1',
-            blogs: ['blog1']
-        },
-        {
-            username: 'user2',
-            name: 'User 2',
-            id: 'user2',
-            blogs: ['blog2']
-        },
-        {
-            username: 'wtfua92',
-            name: 'Andrii Tynok',
-            id: 'user3',
-            blogs: []
-        }
-    ],
+    users: [],
     currentUser: {
-        username: 'wtfua92',
-        id: 'user3',
-        token: '123',
-        name: 'Andrii Tynok',
-        blogs: []
+        username: '',
+        password: '',
+        token: ''
     }
 };
 
 const reducer = (state = initialState, { type, data }) => {
     switch (type) {
-    case 'USER_LOGIN': {
+    case userActions.INIT_USERS: {
+        return { ...state, users: data.users };
+    }
+    case userActions.USER_LOGIN: {
         return { ...state, currentUser: data };
     }
-    case 'USER_LOGOUT': {
+    case userActions.USER_LOGOUT: {
         return { ...state, currentUser: initialState.currentUser };
     }
-    case 'SET_USER_FORM_FIELD': {
+    case userActions.SET_USER_FORM_FIELD: {
         return {
             ...state,
             currentUser: {
@@ -45,7 +36,7 @@ const reducer = (state = initialState, { type, data }) => {
             }
         };
     }
-    case 'USER_ADD_BLOG': {
+    case userActions.USER_ADD_BLOG: {
         const newUsers = state.users.map((u) => {
             if (u.id === state.currentUser.id) {
                 u.blogs.push(data.blogId);
@@ -57,17 +48,16 @@ const reducer = (state = initialState, { type, data }) => {
             currentUser: { ...state.currentUser, blogs: [...state.currentUser.blogs, data.blogId] }
         };
     }
-    case 'USER_REMOVE_BLOG': {
+    case userActions.USER_REMOVE_BLOG: {
         const newUsers = state.users.map((u) => {
-            if (u.id === state.currentUser.id) {
+            if (u.username === state.currentUser.username) {
                 u.blogs = u.blogs.filter(b => b !== data.blogId);
             }
             return u;
         });
-        console.log(newUsers);
         return {
-            users: newUsers,
-            currentUser: { ...state.currentUser, blogs: state.currentUser.blogs.filter(b => b !== data.blogId) }
+            ...state,
+            users: newUsers
         };
     }
     default:

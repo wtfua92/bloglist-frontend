@@ -1,41 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 // import authService from '../services/authentication';
 
-const Blog = ({ blog, index, onDetailsChange, onLike, showDeleteButton, onDelete }) => {
-    // const [detailsVisible, setDetailsVisible] = useState(false);
-    // const [showDeleteButton, setShowDeleteButton] = useState(false);
-    //
-    // useEffect(() => {
-    //     const userData = authService.getUserData();
-    //     if (userData) {
-    //         setShowDeleteButton(blog.user.username === userData.username);
-    //     }
-    // }, [blog.user]);
-
+const Blog = ({ blog }) => {
     const style = {
         width: '300px',
         maxHeight: blog.details ? '' : '80px',
         border: '1px solid #333',
         borderRadius: '5px',
         padding: '5px',
-        margin: '5px',
-        flexBasis: '1',
-        flexGrow: '1.5'
+        margin: '5px'
     };
 
     return (<div className="blog-item" style={style}>
         {/* eslint-disable-next-line react/no-unescaped-entities */}
-        <p className="blog-item__title" onClick={() => { onDetailsChange(index); }}><strong>"{blog.title}"</strong></p>
-        <p className="blog-item__author"> by {blog.author}</p>
-        {
-            blog.details && <div className="blog-item__info">
-                <span className="blog-item__info__likes">Likes: {blog.likes} </span>
-                <button className="blog-item__info__like-button" type="button" onClick={() => { onLike(index); }}>Like</button>
-                <p className="blog-item__info__user">Added by {blog.user.username}</p>
-                {showDeleteButton && <button className="blog-item__info__remove-button" onClick={() => { onDelete(blog.id); }} type="button">Remove</button>}
-            </div>
-        }
+        <span className="blog-item__title"><strong><Link to={`/blogs/${blog.id}`}>"{blog.title}"</Link></strong></span>
+        <span className="blog-item__author"> by {blog.author}</span>
     </div>);
 };
 

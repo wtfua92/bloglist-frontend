@@ -1,32 +1,64 @@
-export const userLogin = ({ username, id, token }) => ({
-    type: 'USER_LOGIN',
-    data: {
-        username,
-        id,
-        token
-    }
-});
+import { userActions } from '../reducers/user.reducer';
+import userService from '../services/user.service';
+import authService from '../services/authentication.service';
+
+export const initUsers = () => {
+    return async (dispatch) => {
+        let users = [];
+        try {
+            users = await userService.getAll();
+        } catch (e) {
+            console.log(e);
+        }
+
+        dispatch({
+            type: userActions.INIT_USERS,
+            data: {
+                users
+            }
+        });
+    };
+};
+
+export const userLogin = (userData) => {
+    return async (dispatch) => {
+        let user = {};
+        try {
+            user = await authService.userLogin(userData);
+            dispatch({
+                type: userActions.USER_LOGIN,
+                data: {
+                    ...user
+                }
+            });
+            authService.saveUserData(user);
+        } catch (e) {
+            throw e;
+        }
+        return user;
+    };
+};
 
 export const userLogout = () => ({
-    type: 'USER_LOGOUT'
+    type: userActions.USER_LOGOUT
 });
 
 export const userAddBlog = (blogId) => ({
-    type: 'USER_ADD_BLOG',
+    type: userActions.USER_ADD_BLOG,
     data: {
         blogId
     }
 });
 
 export const userRemoveBlog = (blogId) => ({
-    type: 'USER_REMOVE_BLOG',
+    type: userActions.USER_REMOVE_BLOG,
     data: {
         blogId
     }
 });
 
 export const setUserFormField = (newField) => ({
-    type: 'SET_USER_FORM_FIELD',
+    type: userActions.SET_USER_FORM_FIELD,
     data: {
         ...newField
     }
@@ -38,5 +70,6 @@ export default {
     userLogout,
     setUserFormField,
     userAddBlog,
-    userRemoveBlog
+    userRemoveBlog,
+    initUsers
 };

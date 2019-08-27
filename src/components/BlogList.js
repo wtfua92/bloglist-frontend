@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Blog from './Blog';
-import { changeDetailsVisibility, likeBlog, deleteBlog } from '../actions/blogs.action';
+import { likeBlog, deleteBlog } from '../actions/blogs.action';
 import { userRemoveBlog } from '../actions/user.action';
 
-function BlogList({ blogs, changeDetailsVisibility, likeBlog, user, deleteBlog, userRemoveBlog }) {
+function BlogList({ blogs, likeBlog, user, deleteBlog, userRemoveBlog }) {
     const style = {
         display: 'flex',
-        flexWrap: 'wrap'
+        flexDirection: 'column'
     };
 
     const onDelete = (blogId) => {
@@ -23,11 +23,9 @@ function BlogList({ blogs, changeDetailsVisibility, likeBlog, user, deleteBlog, 
             </h2>
             <div style={style}>
                 {
-                    blogs.map((b, i) =>
+                    blogs.map((b) =>
                         <Blog blog={b}
                             onLike={likeBlog}
-                            onDetailsChange={changeDetailsVisibility}
-                            index={i}
                             key={b.id}
                             onDelete={onDelete}
                             showDeleteButton={user.id === b.user}
@@ -45,7 +43,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    changeDetailsVisibility,
     likeBlog,
     deleteBlog,
     userRemoveBlog

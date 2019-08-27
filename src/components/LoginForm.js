@@ -3,26 +3,24 @@ import { connect } from 'react-redux';
 import { userLogin, setUserFormField } from '../actions/user.action';
 import { setNotification, clearNotification } from '../actions/notification.action';
 
-import idGenerator from '../helpers/idGenerator';
-
-function LoginForm({ user, users, userLogin, setUserFormField, setNotification, clearNotification }) {
+function LoginForm({ user, userLogin, setUserFormField, setNotification, clearNotification }) {
     const { username, password } = user;
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        if (username && password && users.find((u) => u.username === username)) {
-            userLogin({
-                username,
-                token: idGenerator(),
-                id: idGenerator()
+        userLogin({
+            username,
+            password
+        })
+            .then(({ username }) => {
+                setNotification(`${username} successfully logged in`, setTimeout(() => {
+                    clearNotification();
+                }, 1000), 'success');
+            })
+            .catch((e) => {
+                setNotification(e.response.data.error, setTimeout(() => {
+                    clearNotification();
+                }, 1000), 'error');
             });
-            setNotification(`${username} successfully logged in`, setTimeout(() => {
-                clearNotification();
-            }, 1000), 'success');
-        } else {
-            setNotification(`There is no such user ${username}. Please, sign up first`, setTimeout(() => {
-                clearNotification();
-            }, 1000), 'error');
-        }
     };
 
     return (
@@ -46,7 +44,6 @@ function LoginForm({ user, users, userLogin, setUserFormField, setNotification, 
 }
 
 const mapStateToProps = ({ users }) => ({
-    users: users.users,
     user: users.currentUser
 });
 

@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import { createBlogSetField, createBlogClearAll } from '../actions/createBlogForm.action';
 import { addBlog } from '../actions/blogs.action';
 import { toggleVisibility } from '../reducers/togglable.reducer';
 import { userAddBlog } from '../actions/user.action';
-import idGenerator from '../helpers/idGenerator';
 
 function CreateBlogForm({
     form,
@@ -14,8 +13,6 @@ function CreateBlogForm({
     createBlogClearAll,
     addBlog,
     toggleVisibility,
-    userAddBlog,
-    user,
     history
 }) {
     const { title, author, url } = form;
@@ -24,16 +21,7 @@ function CreateBlogForm({
     const submitHandler = (e) => {
         e.preventDefault();
         if (formFilledIn) {
-            const id = idGenerator();
-            if (user && user.token) {
-                form.user = {
-                    id: user.id,
-                    username: user.username
-                };
-            }
-            form.id = id;
             addBlog(form);
-            userAddBlog(id);
             createBlogClearAll();
             toggleVisibility();
             history.push('/');
