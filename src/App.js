@@ -16,40 +16,40 @@ import { initBlogs } from './actions/blogs.action';
 import { initUsers } from './actions/user.action';
 
 function App({ user, initBlogs, initUsers }) {
-    useEffect(() => {
-        initBlogs();
-        initUsers();
-    }, [initBlogs, initUsers]);
+  useEffect(() => {
+    initBlogs();
+    initUsers();
+  }, [initBlogs, initUsers]);
 
-    return (
-        <div className="App">
-            <Notification />
-            <LoggedInUserDetails user={user} />
-            <br/>
-            <Router>
-                <Navbar/>
-                {!user.token ?
-                    <LoginForm/> :
-                    <Togglable buttonText="Create Blog Entry">
-                        <CreateBlogForm/>
-                    </Togglable>
-                }
-                <Route exact path="/" component={BlogList} />
-                <Route path="/users" component={Users} />
-                <Route path="/users/:id" render={({ match }) => <IndividualUser userId={match.params.id} />} />
-                <Route path="/blogs/:id" render={({ match }) => <BlogWithDetails blogId={match.params.id} />} />
-            </Router>
-        </div>
-    );
+  return (
+    <div className="App">
+      <Notification />
+      <LoggedInUserDetails user={user} />
+      <br/>
+      <Router>
+        <Navbar/>
+        {!user.token ?
+          <LoginForm/> :
+          <Togglable buttonText="Create Blog Entry">
+            <CreateBlogForm/>
+          </Togglable>
+        }
+        <Route exact path="/" component={BlogList} />
+        <Route path="/users" component={Users} />
+        <Route path="/users/:id" render={({ match }) => <IndividualUser userId={match.params.id} />} />
+        <Route path="/blogs/:id" render={({ match }) => <BlogWithDetails blogId={match.params.id} />} />
+      </Router>
+    </div>
+  );
 }
 
 const mapStateToProps = ({ users }) => ({
-    user: users.currentUser
+  user: users.currentUser
 });
 
 const mapDispatchToProps = {
-    initBlogs,
-    initUsers
+  initBlogs,
+  initUsers
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

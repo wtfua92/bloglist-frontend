@@ -2,16 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function Navbar() {
-    const style = {
-        padding: 5
-    };
+  const style = {
+    padding: 5
+  };
 
-    return (
-        <nav style={{ marginBottom: 10 }}>
-            <Link style={style} to='/'>Home</Link>
-            <Link style={style} to='/users'>Users</Link>
-        </nav>
-    );
+  return (
+    <nav style={{ marginBottom: 10 }}>
+      <Link style={style} to='/'>Home</Link>
+      <Link style={style} to='/users'>Users</Link>
+    </nav>
+  );
 }
 
 export default Navbar;

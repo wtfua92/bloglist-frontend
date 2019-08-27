@@ -4,24 +4,24 @@ import authService from './authentication.service';
 const baseUrl = '/api/blogs';
 
 const getConfig = () => ({
-    headers: { Authorization: `Bearer ${authService.getToken()}` || '' }
+  headers: { Authorization: `Bearer ${authService.getToken()}` || '' }
 });
 
 const getAll = () => {
-    const request = axios.get(baseUrl);
-    return request.then(response => response.data);
+  const request = axios.get(baseUrl);
+  return request.then(response => response.data);
 };
 
 const createBlog = async (blogData) => {
-    return (await axios.post(baseUrl, blogData, getConfig())).data;
+  return (await axios.post(baseUrl, blogData, getConfig())).data;
 };
 
 const updateBlog = async (updatedBlog) => {
-    return axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog);
+  return axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog);
 };
 
 const deleteBlog = async (id) => {
-    return axios.delete(`${baseUrl}/${id}`, getConfig());
+  return axios.delete(`${baseUrl}/${id}`, getConfig());
 };
 
 export default { getAll, createBlog, updateBlog, deleteBlog };
